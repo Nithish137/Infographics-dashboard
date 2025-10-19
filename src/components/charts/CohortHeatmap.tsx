@@ -1,26 +1,38 @@
 import { Card } from "@/components/ui/card";
 
-const cohortData = [
-  { label: "A#D", values: [true, true, true, true, true, true, true, true, true] },
-  { label: "81", values: [true, true, true, true, true, true, true, false, false] },
-  { label: "18", values: [true, true, true, true, true, false, false, false, false] },
-  { label: "72", values: [true, true, true, true, false, false, false, false, false] },
-  { label: "261", values: [true, true, true, false, false, false, false, false, false] },
-  { label: "223", values: [true, true, false, false, false, false, false, false, false] },
-  { label: "188", values: [true, true, true, false, false, false, false, false, false] },
-];
+interface CohortRetention {
+  cohort_month: string;
+  day_0: number;
+  day_1: number;
+  day_3: number;
+  day_7: number;
+  day_14: number;
+  day_30: number;
+}
 
-const dayLabels = ["A#D", "81", "18", "72", "261", "223", "188", "282", "161"];
-const percentages = ["$857", "149%", "109%", "29%", "29.7%", "28%"];
+interface CohortHeatmapProps {
+  data: CohortRetention[];
+}
 
-export const CohortHeatmap = () => {
+const dayLabels = ["Day 0", "Day 1", "Day 3", "Day 7", "Day 14", "Day 30"];
+
+export const CohortHeatmap = ({ data }: CohortHeatmapProps) => {
+  const getIntensity = (value: number) => {
+    if (value >= 80) return "bg-primary/60 hover:bg-primary/80";
+    if (value >= 60) return "bg-primary/50 hover:bg-primary/70";
+    if (value >= 40) return "bg-primary/40 hover:bg-primary/60";
+    if (value >= 20) return "bg-primary/30 hover:bg-primary/50";
+    if (value >= 10) return "bg-primary/20 hover:bg-primary/40";
+    return "bg-primary/10 hover:bg-primary/20";
+  };
   return (
     <Card className="p-6 bg-card border-2 border-primary/20 hover:border-primary/40 transition-all duration-300 animate-fade-in" style={{ animationDelay: "500ms" }}>
       <h3 className="text-lg font-semibold text-foreground mb-4">Retention Rate Cohorts (D1,7,/330)</h3>
       
-      <div className="flex gap-4">
-        <div className="flex-1">
-          <div className="grid grid-cols-9 gap-1 mb-2">
+      <div className="overflow-x-auto">
+        <div className="min-w-[500px]">
+          <div className="grid gap-1 mb-2" style={{ gridTemplateColumns: `100px repeat(${dayLabels.length}, 1fr)` }}>
+            <div className="text-xs text-muted-foreground text-center font-semibold">Cohort</div>
             {dayLabels.map((label, i) => (
               <div key={i} className="text-xs text-muted-foreground text-center">
                 {label}
@@ -28,30 +40,25 @@ export const CohortHeatmap = () => {
             ))}
           </div>
           
-          {cohortData.map((row, rowIndex) => (
-            <div key={rowIndex} className="grid grid-cols-9 gap-1 mb-1">
-              {row.values.map((active, colIndex) => (
-                <div
-                  key={colIndex}
-                  className={`h-12 rounded transition-all duration-300 ${
-                    active 
-                      ? colIndex < 3 
-                        ? "bg-primary/60 hover:bg-primary/80" 
-                        : "bg-primary/30 hover:bg-primary/50"
-                      : "bg-primary/10 hover:bg-primary/20"
-                  }`}
-                ></div>
-              ))}
-            </div>
-          ))}
-        </div>
-        
-        <div className="flex flex-col justify-around">
-          {percentages.map((percent, i) => (
-            <div key={i} className="text-xs text-muted-foreground text-right">
-              {percent}
-            </div>
-          ))}
+          {data.map((cohort) => {
+            const values = [cohort.day_0, cohort.day_1, cohort.day_3, cohort.day_7, cohort.day_14, cohort.day_30];
+            return (
+              <div key={cohort.cohort_month} className="grid gap-1 mb-1" style={{ gridTemplateColumns: `100px repeat(${dayLabels.length}, 1fr)` }}>
+                <div className="text-xs text-muted-foreground flex items-center justify-center font-medium">
+                  {cohort.cohort_month}
+                </div>
+                {values.map((value, colIndex) => (
+                  <div
+                    key={colIndex}
+                    className={`h-12 rounded transition-all duration-300 flex items-center justify-center ${getIntensity(value)}`}
+                    title={`${value}%`}
+                  >
+                    <span className="text-xs text-foreground font-medium">{value}%</span>
+                  </div>
+                ))}
+              </div>
+            );
+          })}
         </div>
       </div>
     </Card>

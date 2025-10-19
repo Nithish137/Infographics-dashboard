@@ -14,7 +14,325 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      anomaly_alerts: {
+        Row: {
+          alert_type: string
+          created_at: string | null
+          game_id: string | null
+          id: string
+          is_dismissed: boolean | null
+          message: string
+          severity: Database["public"]["Enums"]["priority_level"] | null
+        }
+        Insert: {
+          alert_type: string
+          created_at?: string | null
+          game_id?: string | null
+          id?: string
+          is_dismissed?: boolean | null
+          message: string
+          severity?: Database["public"]["Enums"]["priority_level"] | null
+        }
+        Update: {
+          alert_type?: string
+          created_at?: string | null
+          game_id?: string | null
+          id?: string
+          is_dismissed?: boolean | null
+          message?: string
+          severity?: Database["public"]["Enums"]["priority_level"] | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "anomaly_alerts_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cohort_retention: {
+        Row: {
+          cohort_month: string
+          created_at: string | null
+          day_0: number | null
+          day_1: number | null
+          day_14: number | null
+          day_3: number | null
+          day_30: number | null
+          day_7: number | null
+          game_id: string | null
+          id: string
+        }
+        Insert: {
+          cohort_month: string
+          created_at?: string | null
+          day_0?: number | null
+          day_1?: number | null
+          day_14?: number | null
+          day_3?: number | null
+          day_30?: number | null
+          day_7?: number | null
+          game_id?: string | null
+          id?: string
+        }
+        Update: {
+          cohort_month?: string
+          created_at?: string | null
+          day_0?: number | null
+          day_1?: number | null
+          day_14?: number | null
+          day_3?: number | null
+          day_30?: number | null
+          day_7?: number | null
+          game_id?: string | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cohort_retention_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dau_trend: {
+        Row: {
+          active_users: number | null
+          created_at: string | null
+          game_id: string | null
+          id: string
+          trend_date: string
+        }
+        Insert: {
+          active_users?: number | null
+          created_at?: string | null
+          game_id?: string | null
+          id?: string
+          trend_date: string
+        }
+        Update: {
+          active_users?: number | null
+          created_at?: string | null
+          game_id?: string | null
+          id?: string
+          trend_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dau_trend_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      download_sources: {
+        Row: {
+          created_at: string | null
+          download_count: number | null
+          game_id: string | null
+          id: string
+          percentage: number | null
+          source_name: string
+        }
+        Insert: {
+          created_at?: string | null
+          download_count?: number | null
+          game_id?: string | null
+          id?: string
+          percentage?: number | null
+          source_name: string
+        }
+        Update: {
+          created_at?: string | null
+          download_count?: number | null
+          game_id?: string | null
+          id?: string
+          percentage?: number | null
+          source_name?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "download_sources_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      downloads_trend: {
+        Row: {
+          created_at: string | null
+          downloads: number | null
+          game_id: string | null
+          id: string
+          trend_date: string
+        }
+        Insert: {
+          created_at?: string | null
+          downloads?: number | null
+          game_id?: string | null
+          id?: string
+          trend_date: string
+        }
+        Update: {
+          created_at?: string | null
+          downloads?: number | null
+          game_id?: string | null
+          id?: string
+          trend_date?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "downloads_trend_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      funnel_stages: {
+        Row: {
+          conversion_rate: number | null
+          created_at: string | null
+          game_id: string | null
+          id: string
+          stage_name: string
+          stage_order: number
+          user_count: number | null
+        }
+        Insert: {
+          conversion_rate?: number | null
+          created_at?: string | null
+          game_id?: string | null
+          id?: string
+          stage_name: string
+          stage_order: number
+          user_count?: number | null
+        }
+        Update: {
+          conversion_rate?: number | null
+          created_at?: string | null
+          game_id?: string | null
+          id?: string
+          stage_name?: string
+          stage_order?: number
+          user_count?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "funnel_stages_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      games: {
+        Row: {
+          created_at: string | null
+          icon_url: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          icon_url?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          icon_url?: string | null
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      global_downloads: {
+        Row: {
+          country_code: string
+          country_name: string
+          created_at: string | null
+          download_count: number | null
+          game_id: string | null
+          id: string
+        }
+        Insert: {
+          country_code: string
+          country_name: string
+          created_at?: string | null
+          download_count?: number | null
+          game_id?: string | null
+          id?: string
+        }
+        Update: {
+          country_code?: string
+          country_name?: string
+          created_at?: string | null
+          download_count?: number | null
+          game_id?: string | null
+          id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "global_downloads_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      metrics: {
+        Row: {
+          average_revenue_per_user: number | null
+          created_at: string | null
+          daily_active_users: number | null
+          day1_retention_rate: number | null
+          game_id: string | null
+          id: string
+          metric_date: string
+          total_downloads: number | null
+        }
+        Insert: {
+          average_revenue_per_user?: number | null
+          created_at?: string | null
+          daily_active_users?: number | null
+          day1_retention_rate?: number | null
+          game_id?: string | null
+          id?: string
+          metric_date?: string
+          total_downloads?: number | null
+        }
+        Update: {
+          average_revenue_per_user?: number | null
+          created_at?: string | null
+          daily_active_users?: number | null
+          day1_retention_rate?: number | null
+          game_id?: string | null
+          id?: string
+          metric_date?: string
+          total_downloads?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "metrics_game_id_fkey"
+            columns: ["game_id"]
+            isOneToOne: false
+            referencedRelation: "games"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
@@ -23,7 +341,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      priority_level: "low" | "medium" | "high" | "critical"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +468,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      priority_level: ["low", "medium", "high", "critical"],
+    },
   },
 } as const

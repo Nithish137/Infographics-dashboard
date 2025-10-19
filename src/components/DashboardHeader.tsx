@@ -1,7 +1,35 @@
 import { Gamepad2, ChevronDown, Share2, Expand, Settings, User, AlertTriangle } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
-export const DashboardHeader = () => {
+interface Game {
+  id: string;
+  name: string;
+  icon_url: string | null;
+  created_at: string;
+}
+
+interface AnomalyAlert {
+  id: string;
+  alert_type: string;
+  message: string;
+  severity: string;
+}
+
+interface DashboardHeaderProps {
+  games: Game[];
+  selectedGame: Game | null;
+  onGameChange: (gameId: string) => void;
+  anomalyAlerts: AnomalyAlert[];
+}
+
+export const DashboardHeader = ({ games, selectedGame, onGameChange, anomalyAlerts }: DashboardHeaderProps) => {
   return (
     <header className="border-b border-border bg-card/50 backdrop-blur-sm sticky top-0 z-50 animate-slide-in">
       <div className="flex items-center justify-between px-6 py-4">
@@ -15,10 +43,18 @@ export const DashboardHeader = () => {
         </div>
         
         <div className="flex items-center gap-4">
-          <div className="flex items-center gap-2 px-4 py-2 bg-secondary rounded-lg border border-border cursor-pointer hover:border-primary/40 transition-colors">
-            <span className="text-sm text-foreground">Game Selector</span>
-            <ChevronDown className="w-4 h-4 text-muted-foreground" />
-          </div>
+          <Select value={selectedGame?.id} onValueChange={onGameChange}>
+            <SelectTrigger className="w-[200px] bg-secondary border-border hover:border-primary/40">
+              <SelectValue placeholder="Select game" />
+            </SelectTrigger>
+            <SelectContent>
+              {games.map((game) => (
+                <SelectItem key={game.id} value={game.id}>
+                  {game.name}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
           
           <div className="flex items-center gap-2 px-4 py-2 bg-secondary rounded-lg border border-border cursor-pointer hover:border-primary/40 transition-colors">
             <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
@@ -43,11 +79,17 @@ export const DashboardHeader = () => {
         </div>
       </div>
       
-      {/* Anomaly Alert */}
-      <div className="absolute top-20 right-6 bg-destructive/10 border border-destructive/30 rounded-lg px-4 py-2 flex items-center gap-2 animate-fade-in shadow-glow-primary">
-        <AlertTriangle className="w-4 h-4 text-destructive" />
-        <span className="text-sm text-destructive font-medium">Anomaly Alert: DAU down 39%</span>
-      </div>
+      {/* Anomaly Alerts */}
+      {anomalyAlerts.length > 0 && (
+        <div className="absolute top-20 right-6 space-y-2">
+          {anomalyAlerts.map((alert) => (
+            <div key={alert.id} className="bg-destructive/10 border border-destructive/30 rounded-lg px-4 py-2 flex items-center gap-2 animate-fade-in shadow-glow-primary">
+              <AlertTriangle className="w-4 h-4 text-destructive" />
+              <span className="text-sm text-destructive font-medium">{alert.message}</span>
+            </div>
+          ))}
+        </div>
+      )}
     </header>
   );
 };
