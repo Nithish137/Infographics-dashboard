@@ -1,4 +1,5 @@
 import { DashboardHeader } from "@/components/DashboardHeader";
+import { GameDetailsCard } from "@/components/GameDetailsCard";
 import { MetricCard } from "@/components/MetricCard";
 import { TrendChart } from "@/components/charts/TrendChart";
 import { DonutChart } from "@/components/charts/DonutChart";
@@ -33,6 +34,8 @@ const Index = () => {
       />
       
       <main className="p-6 space-y-6 max-w-[1800px] mx-auto">
+        {/* Game Details Card */}
+        <GameDetailsCard game={data?.selectedGame || null} metrics={metrics || null} />
         {/* Key Metrics Row */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           <MetricCard

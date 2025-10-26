@@ -50,7 +50,20 @@ export const DashboardHeader = ({ games, selectedGame, onGameChange, anomalyAler
             <SelectContent>
               {games.map((game) => (
                 <SelectItem key={game.id} value={game.id}>
-                  {game.name}
+                  <div className="flex items-center gap-2">
+                    {game.icon_url ? (
+                      <img
+                        src={game.icon_url}
+                        alt={game.name}
+                        className="w-6 h-6 rounded object-cover"
+                      />
+                    ) : (
+                      <div className="w-6 h-6 rounded bg-muted flex items-center justify-center text-xs font-semibold">
+                        {game.name.charAt(0)}
+                      </div>
+                    )}
+                    <span>{game.name}</span>
+                  </div>
                 </SelectItem>
               ))}
             </SelectContent>
